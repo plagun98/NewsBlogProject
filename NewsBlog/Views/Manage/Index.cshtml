@@ -1,0 +1,331 @@
+﻿@using Microsoft.AspNet.Identity;
+@model NewsBlog.Models.IndexViewModel
+
+@{
+    ViewBag.Title = "Manage";
+}
+
+<link href="~/Content/manage.css" rel="stylesheet" />
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
+
+<div class="row" ng-app="manageApp" ng-cloak>
+    <div class="col-md-12" ng-controller="manageCtrl as vm">
+
+       
+    @using (Html.BeginForm("UpdateUser", "Manage", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        if (ViewBag.S != null)
+        {
+            <div id="alert_message" class="alert alert-success" role="alert" style="margin-top:10px; width:90%;">
+                @ViewBag.S
+            </div>
+        }
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#home" style="color:gray!important"><span class="glyphicon glyphicon-home" style="color:#4db7ad"></span> Головна</a></li>
+            
+            <li><a data-toggle="tab" href="#menu1" style="color:gray!important"><span class="glyphicon glyphicon-user"></span> Користувач</a></li>
+            @*<li><a data-toggle="tab" href="#menu2" style="color:gray!important"><span class="glyphicon glyphicon-pushpin" style="color:orange"></span> Читати потім</a></li>*@
+          
+        </ul>
+            <div class="tab-content">
+                <div id="home" class="tab-pane fade in active">
+                    <div class="row">
+                        <div class="col-md-9 col-md-offset-1">
+
+                            <table>
+                                <tbody>
+                                    <tr>
+
+                                        <td><label>Кількість статей:</label></td>
+                                        <td align="right"><text style="color:gray" class="count">@ViewBag.Count</text>&nbsp;&nbsp;</td>
+
+                                        <td><label>Кількість переглядів:</label></td>
+                                        <td align="right"><text style="color:gray" class="count">@ViewBag.vCount</text>&nbsp;&nbsp;</td>
+                                        <td><label>Кількість коментарів:</label></td>
+                                        <td align="right"><text style="color:gray" class="count">@ViewBag.cCount</text><br /></td>
+                                        @if (User.IsInRole("admin"))
+                                        {
+                                        <td align="right"><text style="color:gray; text-decoration:underline">User role: Admin</text><br /></td>
+                                        }
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                            <hr />
+                            <a href="/Articles/Create/" class="btn btn-success" style="background-color:#4db7ad;border:none"><span class="glyphicon glyphicon-leaf"></span> Створити новину</a>
+                            @if (User.IsInRole("admin"))
+                            {
+                                <a href="/Admin/Index/" class="btn btn-info" style="border:none;background-color:#4db7ad"><span class="glyphicon glyphicon-wrench"></span> Адмінпанель</a>
+                            }
+                           
+                            <center>
+                                    <h4 style="color:gray">Опубліковані статі</h4>
+                            </center>
+                            <div class="searchWrap" style="">
+                                <input id="search" type="search" placeholder="Пошук" style="border:none;" ng-model="search">
+                                <span class="glyphicon glyphicon-search" style="color:#4db7ad"></span>
+                            </div>
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <td></td>
+                                        <td>Назва</td>
+                                        <td><span class="glyphicon glyphicon-eye-open" style="color:#4db7ad"></span></td>
+                                        <td><span class="glyphicon glyphicon-comment" style="color:#ffd800"></span></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="a in vm.items | filter:search">
+                                        @{
+                                                var url = Url.Action("GetCoverImage", "Articles", new { id = "{{id=a.ID}}" });
+                                            url = HttpUtility.UrlDecode(url);
+                                        }
+                                        <td>
+                                            <img ng-src="@url" style="width:60%;" class="img-thumbnail manage-img" />
+                                        </td>
+                                        <td>
+                                            <a ng-href="@Url.Action("news", "Home")?id={{a.ID}}"><text class="aName">{{a.Name}}</text></a><br />
+                                            <text style="color:#4db7ad"> Затверджена стаття</text>
+                                        </td>
+                                        <td>{{a.ViewCount}}</td>
+                                        <td>{{a.CommentsCount}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- pager -->
+                            <ul ng-if="vm.pager.pages.length" class="pagination">
+                                <li ng-class="{disabled:vm.pager.currentPage === 1}" class="hidden-xs">
+                                    <a ng-click="vm.setPage(1)">Перша</a>
+                                </li>
+                                <li ng-class="{disabled:vm.pager.currentPage === 1}">
+                                    <a ng-click="vm.setPage(vm.pager.currentPage - 1)">Попередня</a>
+                                </li>
+                                <li ng-repeat="page in vm.pager.pages" ng-class="{active:vm.pager.currentPage === page}">
+                                    <a  ng-click="vm.setPage(page)">{{page}}</a>
+                                </li>
+                                <li ng-class="{disabled:vm.pager.currentPage === vm.pager.totalPages}">
+                                    <a  ng-click="vm.setPage(vm.pager.currentPage + 1)">Наступна</a>
+                                </li>
+                                <li ng-class="{disabled:vm.pager.currentPage === vm.pager.totalPages}" class="hidden-xs">
+                                    <a  ng-click="vm.setPage(vm.pager.totalPages)">Остання</a>
+                                </li>
+                            </ul>
+
+                            <center>
+                                <h4 style="color:gray">Запити на публікацію</h4>
+                            </center>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <td></td>
+                                        <td>Назва</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr ng-repeat="a in vm.articles">
+                                        <td>
+                                            <img ng-src="@url" style="width:60%" class="img-thumbnail manage-img" />
+                                        </td>
+                                        <td>
+                                            <a ng-href="@Url.Action("news", "Home")?id={{a.ID}}"><text class="aName two-line-ellipsis">{{a.Name}}</text></a>
+                                            <text class="aAproved">Перевірка</text>
+                                        </td>
+                                        <td><a ng-href="@Url.Action("Edit", "Articles")?id={{a.ID}}">Редагувати  <span class="glyphicon glyphicon-edit"></span></a></td>
+
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div id="menu1" class="tab-pane fade">
+                    <div class="row">
+                        <div class="col-md-9 col-md-offset-1">
+                            <br />
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <label>Аватар</label>
+                                                <div class="image-upload">
+                                                    
+                                                    <label for="file" class="text-center">
+                                                        <img src="@Url.Action("GetUserCover", "Manage")" style="width:60%;" class="img-thumbnail" />
+                                                    </label>
+                                                    <input type="file" name="file" id="file" style="margin-left: auto; margin-right: auto;" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <label>Ім'я</label>
+                                                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                                                <br />
+                                                <label>Прізвище:</label>
+                                                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                                                <br />
+                                                <label>Email:</label>
+                                                <text style="font-size:12px;">@User.Identity.GetUserName()</text><br />
+                                                
+                                                        [
+                                                        @if (Model.HasPassword)
+                                                        {
+                                                            @Html.ActionLink("Change your password", "ChangePassword", new { @class = "form-control" })
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.ActionLink("Create", "SetPassword")
+                                                        }
+                                                        ]
+                                              
+                                            </td>
+                                            <td align="right">
+                                                <input type="submit" value="Зберегти" style="color:white!important;background-color:#4db7ad; border:none;" class="btn btn-sm btn-success btn-xs" />
+                                            </td>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        
+                        </div>
+                        </div>
+                    </div>
+
+
+
+                    }
+                </div>
+</div>
+
+    @*
+        <div class="form-group">
+            @Html.LabelFor(model => model.HasPassword, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                [
+                @if (Model.HasPassword)
+            {
+                    @Html.ActionLink("Change your password", "ChangePassword", new { @class = "form-control" })
+                }
+                else
+                {
+                    @Html.ActionLink("Create", "SetPassword")
+                }
+                ]
+            </div>
+        </div>*@
+
+
+
+
+
+    @*
+        <dl class="dl-horizontal">
+
+                    @*
+                        <dt>External Logins:</dt>
+                        <dd>
+                            @Model.Logins.Count [
+                            @Html.ActionLink("Manage", "ManageLogins") ]
+                        </dd>
+    *@
+
+    @*
+        Phone Numbers can used as a second factor of verification in a two-factor authentication system.
+
+         See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+            for details on setting up this ASP.NET application to support two-factor authentication using SMS.
+
+         Uncomment the following block after you have set up two-factor authentication
+    *@
+    @*
+        <dt>Phone Number:</dt>
+        <dd>
+            @(Model.PhoneNumber ?? "None") [
+            @if (Model.PhoneNumber != null)
+            {
+                @Html.ActionLink("Change", "AddPhoneNumber")
+                @: &nbsp;|&nbsp;
+                @Html.ActionLink("Remove", "RemovePhoneNumber")
+            }
+            else
+            {
+                @Html.ActionLink("Add", "AddPhoneNumber")
+            }
+            ]
+        </dd>
+    *@
+
+    @*
+        <dt>Two-Factor Authentication:</dt>
+        <dd>
+            <p>
+                There are no two-factor authentication providers configured. See <a href="http://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+                for details on setting up this ASP.NET application to support two-factor authentication.
+            </p>
+            @* @if (Model.TwoFactor)
+            {
+                using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <text>Enabled
+                    <input type="submit" value="Disable" class="btn btn-link" />
+                    </text>
+                }
+            }
+            else
+            {
+                using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <text>Disabled
+                    <input type="submit" value="Enable" class="btn btn-link" />
+                    </text>
+                }
+            }
+        </dd>
+    *@
+
+    @*
+        <dt>Прізвище:</dt>
+        <dd>
+
+        </dd>
+        <dt>Ім'я:</dt>
+        <dd>
+
+        </dd>
+
+        <dt>Аватар:</dt>
+        <dd>
+
+        </dd>
+
+        <dt>Password:</dt>
+        @*<dd>
+                [
+                @if (Model.HasPassword)
+                {
+                    @Html.ActionLink("Change your password", "ChangePassword")
+                }
+                else
+                {
+                    @Html.ActionLink("Create", "SetPassword")
+                }
+                ]
+            </dd>
+                </dl>  *@
+
+
+@section scripts{
+    <script src="~/Scripts/app/counter.js"></script>
+    <script src="~/Scripts/app/manage.js"></script>
+}

@@ -1,0 +1,178 @@
+﻿@model NewsBlog.Models.Article
+@{
+    ViewBag.Title = "article";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/news.css" rel="stylesheet" />
+<script src="https://www.google.com/recaptcha/api.js"></script>
+
+<div  id="comment" ng-init="getPopularArticlesByCategory('@Model.Categories.CategoryName')" ng-controller="commCtrl"  ng-cloak>
+    
+    <div class="row">
+        <div class="col-md-6 col-md-offset-2">
+            <div class="social">
+
+                <div class="social_content">
+                    <a href="https://twitter.com/intent/tweet?url=@HttpContext.Current.Request.Url.AbsoluteUri&text=@Html.Raw(Server.HtmlDecode(Model.Name))&via=YOURTWITTERNAMEHERE">
+                        <img src="~/Content/social_icons/twitter.png" alt="Twitter" style="width:42px;height:42px;border:0">
+                    </a>
+                    <a href="https://facebook.com/share.php?u=@HttpContext.Current.Request.Url.AbsoluteUri">
+                        <img src="~/Content/social_icons/facebook.png" alt="Facebook" style="width:42px;height:42px;border:0">
+                    </a>
+                    <a href="https://plus.google.com/share?url=@HttpContext.Current.Request.Url.AbsoluteUri">
+                        <img src="~/Content/social_icons/google.png" alt="Google+" style="width:42px;height:42px;border:0">
+                    </a>
+                    <a href="http://vk.com/share.php?url=@HttpContext.Current.Request.Url.AbsoluteUri&title=@Html.Raw(Server.HtmlDecode(Model.Name))%20Title&description=Shared%20Page%20Description&image=http://localhost:1530/Articles/GetProductImage/@Model.ID">
+                        <img src="~/Content/social_icons/vk.png" alt="Vkontakte" style="width:42px;height:42px;border:0">
+                    </a>
+                </div>
+                <br />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7 col-md-offset-2">
+            <div class="col-md-2 col-md-offset-10"><text style="color:cornflowerblue">@Model.Categories.CategoryName</text></div>
+                <h3 class="md-flex" style="font-weight:bold;">@Html.Raw(Server.HtmlDecode(Model.Name))</h3>
+
+                <br />
+                
+                    <p style="text-align:justify; background-color:#F8FAFA; border-radius:5px; padding:20px;">@Html.Raw(Server.HtmlDecode(Model.Description))</p>
+                
+                <br />
+
+                <center>
+                    <img width="100%" style="text-align:center" src="@Url.Action("GetCoverImage", "Articles", routeValues: new { id = Model.ID })" class="img-rounded" />
+                </center>
+
+                <div class="content" style="text-align:justify">
+                    @Html.Raw(Model.Content)
+                    <br />
+                    <div style="background-color:#F8FAFA;padding:30px; border-radius:5px;">
+                        <div class="row">
+                            <div class="col-md-2">
+                                @*<img class="rounded-circle" style="width:100px;height:100px;" src="@Url.Action("GetUserImage","Home", new { id = Model.UserID })" />*@
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <div class="ratio img-responsive img-circle" style="background-image: url(@Url.Action("GetUserImage","Home", new { id = Model.UserID }));"></div>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <p style="color:gray;font-size:16px;font-style:normal">Стаття опублікована користувачем: <text style="font-weight:bold"><text ng-bind="userInfo[0].LastName"></text> <text ng-bind="userInfo[0].FirstName"></text></text>. </p>
+                                <p style="font-size:12px; color:gray">@Model.DateCreate</p>
+                            </div>
+
+                        </div>
+                          
+                    </div>
+                </div>
+
+            <br />
+            <h3 style="color:gray">Рекомендації:</h3>
+            <table>
+                <tbody>
+                    <tr>
+                        <td ng-repeat="a in ::popArticles track by $index"> 
+                            @{
+                                var uri = Url.Action("GetCoverImage", "Articles", new { id = "{{id=a.ID}}" });
+                                uri = HttpUtility.UrlDecode(uri);
+                            }
+                            <div ng-if="a.ID!='@Model.ID'">
+                                 <center><text style="font-size:12px; font-weight:700;"><a style="color:gray" ng-href="@Url.Action("news", "Home")?id={{::a.ID}}" ng-bind="a.Name"> </a></text><br /></center>
+                                 <br />
+                                 <center><a ng-href="@Url.Action("news", "Home")?id={{::a.ID}}"><img width="70%" ng-src="@uri" class="img-rounded" /></a></center>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+                <h3 style="font-weight:bold;padding:20px;font-size:18px;">Коментарі(<text ng-bind="value"></text>):</h3>
+
+                <div id="comment" ng-init="getCommentWall('@Model.ID')">
+                    @if (this.User.Identity.IsAuthenticated)
+                    {
+                        <form name="Comment" ng-submit="addComment()" id="commentForm">
+                            <div>
+                                <trix-editor angular-trix ng-model="model.CommentBody" class="trix-content"></trix-editor>
+                            </div>
+                            <div><input name="ArticleId" hidden ng-model="model.ArticleId" ng-init="model = {ArticleId:@Model.ID}" type="text" /></div>
+                            <br />
+                            
+                            <div id="commentBtn"><input type="submit" value="Додати коментар" class="btn btn-success btn-sm" style="background-color:#4db7ad" /></div>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="comment_message alert alert-success" role="alert">
+                            <h5>Тільки зареєстровані користувачі можуть залишати коментарі. <a>@Html.ActionLink("Увійти", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "viewDialog", data_dialog_title = "Авторизація" })</a> до системи.</h5>
+                        </div>
+                    }
+                    <br />
+                    <div ng-repeat="c in comments">
+                        <div id="commentBody">
+                            <div id="commentBodyLine">
+                                @{
+                                    var url = Url.Action("GetuserImage", "Comments", new { id = "{{id=c.Id}}" });
+                                    url = HttpUtility.UrlDecode(url);
+                                }
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <img style="width:50px; height:50px;border-radius:50%;" src="@url" />
+                                    </div>
+                                    <div class="col-md-5">
+                                        <text class="first_name" style="color:#4db7ad" ng-bind="c.FirstName"></text>
+                                        <text class="last_name" style="color:#4db7ad" ng-bind="c.LastName"></text>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <text class="comment_time" ng-bind="c.CommentTime.slice(6,19) | date:'medium'"></text>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-10 col-md-offset-1">
+                                        <p ng-bind-html="c.CommentBody | unsafe" style="background-color:#F8FAFA; padding:15px;"></p>
+                                        <div>
+                                            @*<p><a>Відповісти</a></p>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="background-color:white">
+                            <hr />
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="col-md-3 hidden-xs hidden-sm">
+            <h4 style="text-align:center">ТОП-3 тижня</h4>
+            <table class="table" style="table-layout:fixed">
+                <tr ng-repeat="ta in ::topArticles track by $index">
+                    @{
+                        var path = Url.Action("GetCoverImage", "Articles", new { id = "{{id=ta.ID}}" });
+                        path = HttpUtility.UrlDecode(path);
+                    }
+                    <td>
+                        <center><text style="font-size:12px;font-weight:bold;"><a ng-href="@Url.Action("news", "Home")?id={{::ta.ID}}"> {{::ta.Name}} </a></text><br /></center>
+                        <br />
+                        <center><a ng-href="@Url.Action("news", "Home")?id={{::ta.ID}}"><img width="60%" ng-src="@path" class="img-rounded" /></a></center>
+                        <center>
+                            <span class="glyphicon glyphicon-eye-open" style="color:#4db7ad; font-size:12px;"></span>
+                            <text style="color:gray;font-size:12px;" ng-bind="::ta.ViewCount"></text>&nbsp;&nbsp;
+                            <span class="glyphicon glyphicon-comment" style="color:#ffd800;font-size:12px;"></span>
+                            <text style="color:gray;font-size:12px;" ng-bind="::ta.CommentsCount"></text>
+                        </center>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+    
+</div>
+@section scripts{
+    <script src="~/Scripts/app/comments.js"></script>
+}

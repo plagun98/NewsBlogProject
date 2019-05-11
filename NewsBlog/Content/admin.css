@@ -1,0 +1,64 @@
+﻿[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
+.sideMenu {
+    height: 900px;
+    background-color: #162135;
+}
+
+.space {
+    background-color: white;
+    height: 900px;
+    padding: 30px;
+}
+.select {
+    float: right;
+}
+
+.sidenav ul li {
+    margin-right: 40px;
+}
+
+ .wrapper {
+    height: 100%;
+    position: relative;
+}
+
+.adminTitle {
+    background-color: white;
+    color: gray;
+}
+
+.table tr td a {
+    color: gray;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0 1em;
+}
+
+.sidenav ul li {
+    margin-top: 20px;
+    color: white;
+}
+
+    .sidenav ul li a {
+        color: white;
+    }
+
+.castPager {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 100px;
+}
+#search{
+    padding:5px;
+    width:100%;
+    border:none;
+}
+.searchWrap{
+    margin-top:5px;
+}
+

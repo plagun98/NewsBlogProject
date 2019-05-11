@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNet.Identity
+
+<style>
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    padding-top:5px;
+    float:right;
+}
+img{
+    border-radius:50%;
+}
+
+.dropdown-menu li a{
+    padding-top:5px;
+}
+
+</style>
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+<div class="dropdown">    
+    <img src="@Url.Action("GetUserCover", "Manage", new { id = User.Identity.GetUserId()})" class="dropdown-toggle" data-toggle="dropdown" style="width:40px; height:40px;" />
+    <ul class="dropdown-menu">
+        <li>@Html.ActionLink("Кабінет", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">Вийти</a></li>
+    </ul>
+</div>
+   }
+}
+else
+{
+    <div class="dropdown">
+        <img src="~/Content/user.png"  width="40" height="40" class="dropdown-toggle" data-toggle="dropdown">
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Реєстрація", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "registerDialog", data_dialog_title = "Реєстрація" })</li>
+                <li>@Html.ActionLink("Вхід", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "viewDialog", data_dialog_title = "Авторизація" })</li>
+            </ul>
+    </div>
+}

@@ -1,0 +1,123 @@
+﻿@model NewsBlog.Models.Article
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #Description {
+        margin: 0px;
+        width: 85%;
+        max-width: 100%;
+        height: 94px;
+        border:1px solid #eeeeee;
+        border-radius:2px;
+    }
+
+    #Name {
+        width: 85%;
+        max-width: 100%;
+    }
+    .wrap{
+        background-color:white;
+    }
+    label{
+        font-size:14px;
+        font-weight:200;
+        color:gray;
+    }
+
+</style>
+
+@using (Html.BeginForm("Create", "Articles", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1 wrap">
+                <div class="panel panel-success">
+                    <div class="panel-heading" style="background-color:#4db7ad">
+                            <h4 style="color:white">Створення новини</h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <label>
+                                    Назва новини
+                                </label>
+                            </div>
+                           
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <label>
+                                    Огляд новини
+                                </label>
+                            </div>
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                                <div>
+                                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                </div>                               
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <label>
+                                    Категорія новини
+                                </label>
+                            </div>
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(x => x.CategoriesID, new SelectList(ViewBag.Categories, "ID", "CategoryName", Model.CategoriesID))
+                                @Html.ValidationMessageFor(model => model.Categories, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <label>
+                                    Контент новини
+                                </label>
+                            </div>
+                            <div class="col-md-10 col-sm-10 colx-xs-10" >
+                                @Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-2"><label>Файл обкладинки</label></div>
+                            <div class="col-md-10">
+                                <input type="file" name="file" id="file" style="width: 100%;" />
+                                @Html.ValidationMessageFor(model => model.DateCreate, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-10 col-md-1">
+                                <input type="submit" value="Додати" class="btn btn-success" style="background-color:#4db7ad; border:none" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+              
+            </div>
+        </div>
+     
+    </div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

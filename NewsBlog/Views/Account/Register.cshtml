@@ -1,0 +1,41 @@
+﻿@model NewsBlog.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+            <p><label> @Html.LabelFor(m => m.Email)</label></p>
+
+            <p> @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })</p>
+
+
+            <p><label>@Html.LabelFor(m => m.FirstName)</label></p>
+            <p>    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control" })</p>
+
+
+            <p><label>@Html.LabelFor(m => m.LastName)</label></p>
+
+            <p> @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })</p>
+
+            <p>
+                <label>@Html.LabelFor(m => m.Password)</label>
+            </p>
+
+            <p>
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", @style = "background-color:white" })
+            </p>
+
+            <p><label>@Html.LabelFor(m => m.ConfirmPassword)</label></p>
+
+            <p>@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @style = "background-color:white" }) </p>
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

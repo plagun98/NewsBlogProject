@@ -1,0 +1,101 @@
+﻿@model IEnumerable<NewsBlog.Models.Categories>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<html>
+<head>
+    <style>
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }
+
+        .sideMenu {
+            height: 900px;
+            background-color: #162135;
+        }
+
+        .space {
+            background-color: white;
+            height: 900px;
+            padding: 30px;
+        }
+
+        .wrapper {
+            height: 100%;
+        }
+
+        .adminTitle {
+            background-color: white;
+            color: gray;
+        }
+
+        .table tr td a {
+            color: gray;
+        }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 0 1em;
+        }
+
+        .sidenav ul li {
+            margin-top: 20px;
+            color: white;
+        }
+        .sidenav ul li a{
+            color:white;
+        }
+    </style>
+</head>
+<body>
+<div ng-app="adminApp" ng-cloak>
+    <div ng-controller="adminCtrl">
+        <div class="wrapper">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="sideMenu">
+                        <div class="adminTitle text-center">
+                            Admin panel
+                        </div>
+                        <nav class="sidenav text-center">
+                            <ul>
+                                <li><a ng-href="@Url.Action("Index", "Admin")">Новини</a></li>
+                                <li><a ng-href="@Url.Action("Index", "Categories")">Категорії</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="space">
+                        <a href="@Url.Action("Create", "Categories")" class="btn btn-success btn-sm">
+                        <span class="glyphicon glyphicon-plus"></span> Нова категорія
+                        </a>
+                        <table class="table">
+                            <tr ng-repeat="cat in categories | Pagestart:(currentPage-1)*PerPageItems | limitTo:PerPageItems ">
+                                <td>
+                                    {{::cat.ID}}
+                                </td>
+                                <td>
+                                    {{::cat.CategoryName}}
+                                </td>
+                                <td>
+                                    <a ng-href="@Url.Action("Edit", "Categories")?id={{::cat.ID}}"><span class="glyphicon glyphicon-edit"></span></a>
+                                    <a ng-href="#" class="" ng-confirm-click="Are you sure to delete this record ?" confirmed-click="removeCategory(cat.ID)"><span class="glyphicon glyphicon-remove"></span></a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
+
+@section scripts{
+    <script src="~/Scripts/app/admin.js"></script>
+}

@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="~/Content/admin.css" rel="stylesheet" />
+</head>
+<body>
+    <div ng-app="adminApp"  ng-cloak>
+        <div ng-controller="adminCtrl as vm">
+            <div class="wrapper">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="sideMenu">
+                            <div class="adminTitle text-center">
+                                Admin panel
+                            </div>
+                            <nav class="sidenav text-center">
+                                <ul>
+                                    <li><a ng-href="@Url.Action("Index", "Admin")">Новини</a></li>
+                                    <li><a ng-href="@Url.Action("Index", "Categories")">Категорії</a></li>
+                                    @*<li><a ng-href="@Url.Action("Index", "Manage")">Категорії</a></li>*@
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <div class="col-md-10">
+                        <div class="space">
+                            <text style="color:gray; font-size:12px;">Всього статей: {{totalItems}}</text>_ <text style="color:gray; font-size:12px;">Відсортовано:{{filteredItems}}</text>
+                            <div class="select">
+                                <text style="color:gray; font-size:14px;">Сортувати:</text>
+                                <select id="select" ng-model="articles" ng-change="update(articles)">
+                                    <option value="" ng-if="false"></option>
+                                    <option name="all" value="all">Всі</option>
+                                    <option value="today">На сьогодні</option>
+                                    <option value="weekly">За тиждень</option>
+                                    <option value="notallowed">Не затверджені</option>
+                                </select>
+                            </div>
+
+                            <div class="searchWrap" style="background-color:#fff5b9">
+                                <input id="search" type="search" placeholder="Пошук" style="background-color:#fff5b9" ng-model="search">
+                            </div>
+                            <br />
+
+                            <table class="table">
+                                <tr ng-repeat="a in articles | filter:search | Pagestart:(currentPage-1)*PerPageItems | limitTo:PerPageItems track by $id(a.ID)">
+                                    @{
+                                        var url = Url.Action("GetCoverImage", "Articles", new { id = "{{id=a.ID}}" });
+                                        url = HttpUtility.UrlDecode(url);
+                                    }
+                                    <td>
+                                        <img ng-src="@url" width="80" height="80" class="img-thumbnail" />
+                                    </td>
+                                    <td>
+                                        <a ng-href="@Url.Action("news", "Home")?id={{::a.ID}}"> {{::a.Name}} </a>
+                                         <div ng-show="{{a.isAprove==true}}" style="color:green; font-size:12px;">Затверджена стаття</div>
+                                         <div ng-show="{{a.isAprove==false}}"style="color:red; font-size:12px;">Не затверджена стаття</div>
+                                         <div ng-show="{{a.isHotArticle==true}}"style="color:lightgray; font-size:12px;">Гаряча новина</div>
+                                         <div ng-show="{{a.isAdminChoose==true}}" style="color:lightgray; font-size:12px;">Вибір редакції</div>
+                                    </td>
+                                    <td>
+                                        <text>
+                                            <a ng-href="@Url.Action("setHotArticle","Articles")?id={{a.ID}}">
+                                                <span class="glyphicon glyphicon-fire" style="color:orangered"></span>
+                                            </a>&emsp;
+                                            <a ng-href="@Url.Action("setAdminChoosedArticle","Articles")?id={{a.ID}}">
+                                                <span class="glyphicon glyphicon-bell" style="color:#ffd800"></span>
+                                            </a>
+                                        </text>
+                                    </td>
+                                    <td>
+                                        <a ng-href="@Url.Action("Edit", "Articles")?id={{::a.ID}}"><span class="glyphicon glyphicon-edit"></span></a><br />
+                                        <a ng-href="#" class="" ng-confirm-click="Are you sure to delete this record ?" confirmed-click="removeArticle(a.ID)"><span class="glyphicon glyphicon-remove"></span></a><br />
+                                        <a ng-href="@Url.Action("isAproved","Admin")?id={{a.ID}}">
+                                            <span class="glyphicon glyphicon-ok" style="color:forestgreen"></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <div class="castPager">
+                                <button type="button" class="btn btn-success btn-sm" ng-disabled="currentPage == 1"
+                                        ng-click="currentPage=currentPage-1">
+                                    Назад
+                                </button>
+                                <span>Стр. {{currentPage}} з {{ numberOfPages() }}</span>
+
+                                <button type="button" class="btn btn-success btn-sm" ng-disabled="currentPage == numberOfPages()"
+                                        ng-click="currentPage = currentPage+1">
+                                    Далі
+                                </button>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
+
+@section scripts{
+    <script src="~/Scripts/app/admin.js"></script>
+}

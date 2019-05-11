@@ -1,0 +1,238 @@
+﻿[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
+#showMore {
+        background-color:#4db7ad;
+        border: none;
+        display:block;
+        color: white;
+        padding: 15px 32px;
+        width:500px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 16px;
+        margin: 0 auto;
+        position:relative;
+    }
+
+    img {
+    -webkit-filter: brightness(100%);
+}
+
+
+.comment_time {
+    color: #162135;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: right;
+}
+
+/** {
+        font-family: 'Open Sans', serif;
+    }*/
+
+.comment_body {
+    font-size: 14px;
+    color: gray;
+    background-color: #f4f8fc;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+.recentComments {
+    padding: 30px;
+}
+
+nav {
+    margin-left: 70px;
+
+}
+
+ul {
+    list-style: none;
+}
+
+
+    nav li {
+        display: inline;
+        padding-right: 10px;
+        
+    }
+        nav li a {
+            color: gray;
+        }
+
+
+.mynav ul {
+    padding: 10px;
+}
+
+
+#custom-search-input {
+    padding: 3px;
+    border-radius: 3px;
+    background-color: #fffad1;
+}
+
+    #custom-search-input input {
+        border: 0;
+        box-shadow: none;
+        background-color: #fffad1;
+    }
+
+    #custom-search-input button {
+        margin: 2px 0 0 0;
+        background: none;
+        box-shadow: none;
+        border: 0;
+        color: #666666;
+        padding: 0 8px 0 10px;
+        border-left: solid 1px #ccc;
+    }
+
+        #custom-search-input button:hover {
+            border: 0;
+            box-shadow: none;
+            border-left: solid 1px #ccc;
+        }
+
+    #custom-search-input .glyphicon-search {
+        font-size: 14px;
+    }
+
+    img:hover {
+        -webkit-filter: brightness(80%);
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+
+    .most_popular{
+        background-color:#ffffff;
+        font-weight:bold;
+        background-size: 100% 100%;
+        border-radius: 10px;
+        clear:left;
+
+    }
+    .most_popular p{
+        text-align:justify; 
+        font-weight:bold; 
+        font-size:25px;
+        padding:15px;
+    }
+
+         #TopBar p{
+         text-align:center;
+         padding-top:15px;
+     }
+
+
+     #vk_groups{
+         margin:auto;
+         padding-top:50px;
+         position:absolute;
+     }
+
+    .popular_by_week{
+        width:25%;
+        float:right;
+        background-color:#ffffff;
+    }
+    .popular_by_week p{
+        font-size:15px; 
+        font-weight:bold;
+        margin-left:5px;
+    }
+    .tableWrap{
+        height:1000px;
+    }
+
+    #MainTable{
+        width:60%;
+        table-layout:fixed;
+        margin-left:5%;
+        margin-top:-20px;
+        background-color:#ffffff;
+        padding:10px;
+
+    }
+    
+    #MainTable td:first-child{
+    }
+ 
+    #MainTable tr td:first-child ul li:first-child{
+        text-align:center;
+
+    }
+
+   #itemName{
+        padding-bottom:50px;
+    }
+
+    #MainTable tr td:nth-child(1), th:nth-child(1){
+        width:200px; 
+        vertical-align:middle;
+    }
+
+    #MainTable li:first-child{
+        color:#4db7ad;
+        font-weight:bold;
+        font-size:14px;
+    }
+     #MainTable li:last-child{
+        margin-left:30px;
+    }
+
+.castPager{
+    margin-left:600px;
+}
+
+footer {
+    background-color: #162135;
+    height: 200px;
+    padding: 30px;
+    color: gray;
+
+}
+
+    footer a {
+        color: gray;
+    }
+
+
+
+    table {
+		overflow-x: auto;
+		display: block;
+	}
+
+    table, table td{
+        border: none !important;
+    }
+
+    img {
+     max-width: 100%; 
+     height: auto; 
+     width: auto\\9; /* ie8 */
+    }
+
+    .counts{
+        float:right;
+    }
+
+    #innerSearch #searchbtn{
+        width:50px;
+        float:left;
+        color:white;
+        margin-top:10px; 
+        margin-left:5px; 
+        background-color:transparent; 
+        border-radius:5%; 
+        height:30px;
+    }

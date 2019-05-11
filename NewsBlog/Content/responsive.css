@@ -1,0 +1,49 @@
+﻿ @media (min-width: 768px) and (max-width: 991px){
+         #TopBar{
+            display:none;
+  }
+
+         .popular_by_week{
+             display:none;
+         }
+
+
+    #MainTable{
+        width:100%;
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+     #MainTable tr td:nth-child(1), th:nth-child(1){
+       display:none;
+   } 
+
+     .most_popular tr td:nth-child(2), td:nth-child(3){
+         display:none;
+     }
+ }
+@media (max-width: 767px) {
+    #TopBar {
+        display: none;
+    }
+
+    .popular_by_week {
+        display: none;
+    }
+
+    .most_popular{
+        width:80%;
+    }
+
+    #MainTable {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #MainTable tr td:nth-child(1), th:nth-child(1) {
+            display: none;
+    }
+    .most_popular tr td:nth-child(2), td:nth-child(3){
+         display:none;
+     }
+}

@@ -1,0 +1,256 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+   
+    var options = new AjaxOptions()
+    {
+        UpdateTargetId = "tabledata",
+        Url = Url.Action("AjaxMostPopular"),
+        LoadingElementId = "loadingIndicator",
+    };
+}
+
+<link href="~/Content/index.css" rel="stylesheet" />
+<link href="~/Content/responsive.css" rel="stylesheet" />
+
+<div class="row">
+    <div ng-app="homeApp" ng-cloak>
+        <div ng-controller="homeCtrl as vm">
+            <div class="row">
+                <div class="col-md-8 col-sm-8 hidden-xs">
+                    <nav style="float:left">
+                        <ul>
+                            <li>
+                                <a href="#" ng-click="getAllArticles()"><span class="glyphicon glyphicon-leaf" style="color:#4db7ad;"></span> Всі новини</a>
+                            </li>
+
+                            <li>
+                                <a href="#" ng-click="getHotArticles()"><span class="glyphicon glyphicon-fire" style="color:orangered"></span> Гарячі новини</a>
+                            </li>
+
+                            <li>
+                                <a href="#" ng-click="getAdminChoosedArticles()"><span class="glyphicon glyphicon-bell" style="color:#ffd800"></span>Вибір редакції </a>
+                            </li>
+
+                            <li>
+                                <a href="#" ng-click="getPublishedArticlesByCommentsCount()"><span class="glyphicon glyphicon-send" style="color:dodgerblue"></span> Обговорювані</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-10 col-xs-offset-1" align="center">
+                    <div id="custom-search-input">
+                        <div class="input-group col-md-12">
+                            <input class="search" type="search" placeholder="Пошук" style="border:none;margin-left:5px; margin-right:5px; background-color:#fffad1;padding:5px;border-radius:3px;" ng-model="search">
+                            <span class="input-group-btn">
+                                <button class="btn btn-info btn-xs" type="button">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+
+                                        </div>
+
+               
+
+            </div>
+            <br /><br />
+
+            <p ng-bind="messageString" ng-show="messageString" id="alert_message" style="margin-bottom:50px;margin-left:120px;background-color:#F8FAFA; color:gray" class="animate-show animage-hide"></p>
+
+
+
+            <div class="popular_by_week">
+                <p style="color:#4db7ad">
+                    Популярні за тиждень
+                </p>
+                <table class="table" style="table-layout:fixed">
+                    <tr ng-repeat="ta in ::vm.topArticles track by $index">
+                        @{
+                            var uri = Url.Action("GetCoverImage", "Articles", new { id = "{{id=ta.ID}}" });
+                            uri = HttpUtility.UrlDecode(uri);
+                        }
+                        <td>
+                            <center><text style="font-size:12px; font-weight:700;"><a ng-href="@Url.Action("news", "Home")?id={{::ta.ID}}"> {{::ta.Name}} </a></text><br /></center>
+                            <br />
+                            <center><a ng-href="@Url.Action("news", "Home")?id={{::ta.ID}}"><img width="80%" ng-src="@uri" class="img-rounded" /></a></center>
+                            <center>
+                                <span class="glyphicon glyphicon-eye-open" style="color:#4db7ad; font-size:12px;"></span>
+                                <text style="color:gray;font-size:12px;" ng-bind="::ta.ViewCount"></text>&nbsp;&nbsp;
+                                <span class="glyphicon glyphicon-comment" style="color:#ffd800;font-size:12px;"></span>
+                                <text style="color:gray;font-size:12px;" ng-bind="::ta.CommentsCount"></text>
+                            </center>
+                        </td>
+                    </tr>
+                </table>
+
+                <p style="color:#4db7ad">
+                    Категорії
+                </p><br />
+
+                <div ng-repeat="c in ::categories track by $index">
+                    <a href='#' ng-click="searchCategory(c.CategoryName)" style="color:gray ; font-weight:bold; float:left; padding-left:10px;"><text style="color:yellow">&#9632;</text> {{c.CategoryName}} </a><br />
+                </div>
+                <br />
+                <p style="color:#4db7ad">
+                    Останні коментарі
+                </p>
+                <div class="recentComments">
+
+                    <div ng-repeat="rc in rcomm">
+                        @{
+                            var url = Url.Action("GetArticleImage", "Comments", new { id = "{{id=rc.ID}}" });
+                            url = HttpUtility.UrlDecode(url);
+                        }
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-4">
+                                    <a ng-href="@Url.Action("news", "Home")?id={{::rc.ID}}"><img ng-src="@url" style="width:100px;" class="img-rounded" /></a>
+                                </div>
+                                <div class="col-md-8">
+                                    <text class="comment_time">{{rc.FirstName }}{{rc.LastName}}</text>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-10 col-md-offset-1 comment_body">
+                                    <text class="comment_body" ng-bind-html="rc.CommentBody | unsafe"></text>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content" style="width:100%; margin:0px 5px 0px 0px;min-height:450px;">
+                <br />
+                <table cellspacing="0" class="table" cellpadding="0" id="MainTable">
+                    <tr ng-repeat="pa in vm.items | filter:search">
+                        <td>
+                            <ul>
+                                <li>
+                                    <div class="ratio img-responsive img-circle" style="margin: 10px auto;width:100px;height:100px;background-image: url(@Url.Action("GetUserImage","Home")?id={{::pa.Id}});"></div>
+                                    <text ng-bind="::pa.LastName"></text>&nbsp; <text ng-bind="::pa.FirstName"></text> <br />
+                                    @*<img class="rounded-circle" style="width:100px;height:100px;" ng-src="@Url.Action("GetUserImage","Home")?id={{::pa.Id}}" />*@
+                                </li>
+                                <li style="text-align:center;margin-left:0px;color:#4db7ad; font-size:14px;"><text ng-bind="::pa.CategoryName"></text></li>
+                                  
+                               
+                            </ul>
+                        </td>
+
+                        <td>
+                            <text style="float:left; font-size:16px; font-weight:bold; text-transform:uppercase"><a ng-href="@Url.Action("news", "Home")?id={{::pa.ID}}" style="color:gray"> {{::pa.Name}} </a></text><br />
+                            <center><a ng-href="@Url.Action("news", "Home")?id={{::pa.ID}}"> <img id="cover" width="100%" ng-src="@Url.Action("GetCoverImage", "Articles")?id={{::pa.ID}}" class="img-rounded" /></a></center>
+                            <span class="glyphicon glyphicon-eye-open" style="color:#4db7ad;padding-top:10px;"></span>
+                            <text style="color:gray" ng-bind="::pa.ViewCount"></text>&nbsp;&nbsp;
+                            <span class="glyphicon glyphicon-comment" style="color:#ffd800"></span>
+                            <text style="color:gray" ng-bind="::pa.CommentsCount"></text>
+                            <text ng-show="pa.isAdminChoose==1" style="background-color:gold; padding:3px;color:white; border-radius:2px;">Вибір редакції
+                            </text>
+                            &emsp;
+                            <text ng-show="pa.isHotArticle==1" style="background-color:orangered; padding:3px;color:white; border-radius:2px;">
+                                Гаряча новина
+                            </text>
+
+                              <div style="float:right;padding-top:10px;">
+                                <span class="glyphicon glyphicon-time" aria-hidden="true" style="color:#4db7ad"></span>
+                                <text style="font-size:12px;color:gray" ng-bind="::pa.DateCreate.slice(6,19) | date"> &nbsp;&nbsp;&nbsp;</text>
+                            </div>
+                            <br />
+                            <br />
+                            <text style="word-break:break-all; font-size:15px;" ng-bind="::pa.Description"></text> <br />
+                            <a ng-href="@Url.Action("news", "Home")?id={{::pa.ID}}"><text id="itemName" style="float:right; font-weight:bold; color:#4db7ad">Читати далі <span style="color:#ffd800">&#9658;</span></text></a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 col-xs-12 col-sm-12" align="center">
+                    <!-- pager -->
+                    <ul ng-if="vm.pager.pages.length" class="pagination">
+                        <li ng-class="{disabled:vm.pager.currentPage === 1}">
+                            <a ng-href="#" ng-click="vm.setPage(1)">Перша</a>
+                        </li>
+                        <li ng-class="{disabled:vm.pager.currentPage === 1}">
+                            <a ng-href="#" ng-click="vm.setPage(vm.pager.currentPage - 1)">Попередня</a>
+                        </li>
+                        <li ng-repeat="page in vm.pager.pages" ng-class="{active:vm.pager.currentPage === page}" class="hidden-xs">
+                            <a ng-href="#" ng-click="vm.setPage(page)">{{page}}</a>
+                        </li>
+                        <li ng-class="{disabled:vm.pager.currentPage === vm.pager.totalPages}">
+                            <a ng-href="#" ng-click="vm.setPage(vm.pager.currentPage + 1)">Наступна</a>
+                        </li>
+                        <li ng-class="{disabled:vm.pager.currentPage === vm.pager.totalPages}" class="hidden-xs">
+                            <a ng-href="#" ng-click="vm.setPage(vm.pager.totalPages)">Остання</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="row">
+                <hr />
+                <div class="col-md-8 col-sm-12 col-xs-12" align="center">
+                    <p><span class="glyphicon glyphicon-leaf" style="color:#4db7ad;"></span> <text style="font-size:22px;color:gray">Найкращі матеріали</text></p>
+                </div>
+            </div>
+            <div class="row">
+                    <div class="col-md-8 col-sm-12 col-xs-12" align="center">
+                        <div class="most_popular" style="margin-top:10px">
+                            @using (Ajax.BeginForm(options))
+                            {
+                                <table cellpadding="5">
+                                    <tbody id="tabledata">
+                                        @Html.Action("AjaxMostPopular")
+                                    </tbody>
+                                </table>
+                                <input type="submit" value="Показати ще" id="showMore" /><br />
+                            }
+                        </div>
+                    </div>
+                </div>
+           
+
+            <footer>
+                <div class="row">
+                    <div class="col-md-3 col-lg-3 col-sm-3" align="center">
+                        <p><i class="glyphicon glyphicon-leaf" style="padding-right:5px; font-size:28px; color:#4DB7AD;"></i><text style="font-weight:700; font-size:24px; color:white ">News CMS</text></p>
+                        <p>Розробник Плагун Олександр</p>
+                    </div>
+                    <div class="col-md-3 hidden-xs col-lg-3 col-sm-3">
+                        <p>
+                            Контактна інформація: <a href="andrii.karachevtsev@gmail.com">
+                                plagun98@gmail.com
+                            </a>.
+                        </p>
+                    </div>
+                    <div class="col-md-3 hidden-xs col-lg-3 col-sm-3">
+                        <p>
+                            ВНЗ:<br /> <a href="http://www.dut.edu.ua/">
+                                НТУУ "КПІ ім. І. Сікорського"
+                            </a>.
+                        </p>
+                    </div>
+                    <div class="col-md-3 hidden-xs col-lg-3 col-sm-3">
+                        <p>
+                            GitHub:<br /> <a href="https://github.com/doctorasp">
+                                ASP.NET Development
+                            </a>.
+                        </p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+        @section scripts
+    {
+            <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+            <script src="~/Scripts/underscore.min.js"></script>
+            <script src="~/Scripts/app/home.js"></script>
+        }
+    </div>

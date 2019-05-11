@@ -1,0 +1,61 @@
+﻿@model NewsBlog.Models.Categories
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .wrapper {
+        background-color: white;
+        width: 75%;
+        margin-left: auto;
+        margin-right: auto;
+        height:500px;
+    }
+
+    .innerWrap {
+        padding: 20px;
+    }
+</style>
+
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="wrapper form-horizontal">
+        <div class="innerWrap">
+            <div class="row">
+                <div class="col-md-10">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.ID)
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CategoryName, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CategoryName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CategoryName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Save" class="btn btn-default" />
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                }
+
+                
+
+                @section Scripts {
+                    @Scripts.Render("~/bundles/jqueryval")
+                    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
+                    <script src="~/Scripts/app/pagination.js"></script>
+                }

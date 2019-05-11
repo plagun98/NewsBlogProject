@@ -1,0 +1,133 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewsCMS</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href='@Url.Content("~/Content/themes/base/all.css")' rel="stylesheet" type="text/css" />
+    <link href="~/Content/preload.css" rel="stylesheet" />
+    <link href="~/Content/layout.css" rel="stylesheet" />
+
+
+    <style>
+        .nav li a {
+            margin-left: 30px;
+        }
+
+        .navbar-header {
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .nav > li > a:focus, .nav > li > a:hover {
+            text-decoration: none;
+            background-color: transparent !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container_load">
+        <div class="item item-1"></div>
+        <div class="item item-2"></div>
+        <div class="item item-3"></div>
+        <div class="item item-4"></div>
+    </div>
+
+    <div class="navbar navbar-default">
+        <div class="container">
+
+            <div class="navbar-header">
+                <div class="hidden-md hidden-lg hidden-sm col-xs-6 col-xs-offset-2" style="display:block; float:left;">
+                    <div style="text-align:center;">
+                        <span class="glyphicon glyphicon-leaf" style="font-size:20px; margin-top:10px;color:#4DB7AD;"></span>
+                        <a href="/Home/Index/"><text style="font-weight:700; font-size:18px; color:white;">News CMS</text></a>
+                    </div>
+
+                </div>
+
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            </div>
+
+            <div class="navbar-collapse collapse">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-sm-offset-4">
+                        <div class="col-md-5 ">
+                            <ul class="nav navbar-nav">
+                                <li class="hidden-xs">
+                                    <a href="/Home/Index">
+                                        <span class="glyphicon glyphicon-leaf" style="font-size:20px; color:#4DB7AD;"></span>
+                                        <text style="font-weight:700; font-size:25px;color:whitesmoke">News CMS</text>
+                                    </a>
+
+                                </li>
+
+                                @if (Request.IsAuthenticated)
+                                {
+
+                                    @Html.AntiForgeryToken()
+
+                                    <li class="hidden-md hidden-sm hidden-lg">@Html.ActionLink("Кабінет", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
+                                    <li class="hidden-md hidden-sm hidden-lg"><a href="javascript:document.getElementById('logoutForm').submit()">Вийти</a></li>
+                                }
+
+                                else
+                                {
+                                    <li class="hidden-md hidden-sm hidden-lg">@Html.ActionLink("Реєстрація", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class = "registerDialog", data_dialog_title = "Реєстрація" })</li>
+                                    <li class="hidden-md hidden-sm hidden-lg">@Html.ActionLink("Вхід", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "viewDialog", data_dialog_title = "Авторизація" })</li>
+                                }
+
+
+                            </ul>
+
+                        </div>
+
+                        <div class="col-lg 6 col-md-5 col-md-offset-2">
+                            <div class="hidden-xs col-lg-2 col-md-2 col-sm-2 col-sm-offset-1">
+                                @Html.Partial("_LoginPartial")
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" style="max-width :100%; padding:15px;">
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryUI")
+
+    <script src="~/Scripts/angular.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/trix/0.9.2/trix.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/trix/0.9.2/trix.js"></script>
+    <script src="~/Scripts/app/angular-trix.js"></script>
+    <script src="~/Scripts/app/scrollup.js"></script>
+    <script src="~/Scripts/app/log_reg.js"></script>
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
+    
+    <script>
+        $(window).on('load',function () {
+            $(".container_load").fadeOut("slow");;
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+    <a href="#" class="scrollup">Наверх</a>
+</body>
+</html>

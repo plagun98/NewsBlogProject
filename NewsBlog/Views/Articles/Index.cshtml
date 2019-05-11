@@ -1,0 +1,140 @@
+﻿@model PagedList.IPagedList<NewsBlog.Models.Article>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    p.clip {
+        overflow: hidden; /* Обрезаем все, что не помещается в область */
+        text-overflow: clip; /* Добавляем многоточие */
+    }
+
+    .ui-dialog-titlebar {
+        background-color: #4db7ad;
+        background-image: none;
+        color: #000;
+    }
+
+    .text p {
+        margin: 0;
+    }
+
+    .line-clamp {
+        display: -webkit-box;
+        -webkit-line-clamp: 5;
+        -webkit-box-orient: vertical;
+    }
+</style>
+
+@*<h2>Всього новин: @Model.TotalItemCount</h2>*@
+
+@Html.ActionLink("Додати новину|", "Create", null, new { @style = "color:#4db7ad; font-weight:bold" })
+@Html.ActionLink("Список очікуванняя", "Create", null, new { @style = "color:#4db7ad; font-weight:bold" })
+<br /><br />
+
+<div>
+    <table class="table" border="0">
+        <tr>
+            <th>
+                Обкладинка
+            </th>
+            <th>
+                Назва
+            </th>
+            <th>
+                Короткий зміст
+
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td align="left">
+                    <img width="100" height="100" style="border-radius:0px;" src="@Url.Action("GetCoverImage", "Articles", routeValues: new { id = item.ID })" class="img-round" />
+                </td>
+                <td>
+                    @Html.ActionLink(item.Name, "news", "Home", new { id = item.ID }, new { @style = "color:#000; font-weight:bold;" })
+                    <br />
+                    <br />
+                    @Html.DisplayFor(modelItem => item.DateCreate)
+
+                </td>
+
+                <td style="width:400px">
+                    <div class="text line-clamp"><p class="clip">@Html.DisplayFor(modelItem => item.Description)</p></div>
+                </td>
+
+                <td style="width:80px">
+
+                    <span>
+                        <a href="@Url.Action("Edit", new {id=item.ID })">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </a>
+                    </span><br />
+                    <span>
+                        <a href="@Url.Action("Delete",new { id = item.ID})"  class = "delete-link">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    </span><br />
+                    <span>
+                        <a href="@Url.Action("isAproved", new { id = item.ID })">
+                            <span class="glyphicon glyphicon-ok" style="color:forestgreen"></span>
+                        </a>
+                    </span>
+                </td>
+            </tr>
+        }
+
+    </table>
+    <div id="delete-dialog" title="Видалення новини">
+        <p>Ви впевнені що хочете видалити цю новину?</p>
+    </div>
+
+
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+
+</div>
+
+
+@section scripts
+    {
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script>
+    var deleteLinkObj;
+    // delete Link
+    $('.delete-link').click(function () {
+        deleteLinkObj = $(this);  //for future use
+        $('#delete-dialog').dialog('open');
+        return false; // prevents the default behaviour
+    });
+
+    $('#delete-dialog').dialog({
+        autoOpen: false, width: 400, resizable: false, modal: true, //Dialog options
+        buttons: {
+            "Так": function () {
+                $.post(deleteLinkObj[0].href, function (data) {  //Post to action
+                    if (data.Success) {
+                        deleteLinkObj.closest("tr").hide('fast'); //Hide Row
+
+                        //(optional) Display Confirmation
+                    }
+                    else {
+                        //(optional) Display Error
+                    }
+                });
+                $(this).dialog("close");
+
+            },
+            "Відмінити": function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+    </script>
+
+}

@@ -1,0 +1,64 @@
+﻿.image-upload > input {
+    display: none;
+}
+
+.image-upload img:hover {
+    border: 1px solid #4db7ad;
+}
+
+table tr, table td {
+    border: none !important;
+}
+
+    table tr td {
+        padding: 15px;
+    }
+
+        table tr td label {
+            text-align: left;
+        }
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+input{
+    color:gray!important;
+   }
+
+.aName {
+    font-size: 14px;
+    color:gray;
+}
+
+.aAproved {
+    color: red;
+    font-size: 12px;
+}
+
+.two-line-ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 350px;
+    line-height: 25px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+label {
+    color: gray;
+    font-size:12px;
+}
+.count {
+    color: gray;
+    font-size: 12px;
+}
+table tr td{
+    color:gray;
+    font-size:12px;
+}
+
+@media (max-width: 767px) {
+    .manage-img{
+        display:none;
+    }
+}
