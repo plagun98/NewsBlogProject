@@ -55,14 +55,14 @@
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-sm-2">
-                                            <div class="ratio img-responsive img-circle" style="background-image: url(@Url.Action("GetUserImage","Home", new { id = Model.UserID }));"></div>                                            
+                                            <div class="ratio img-responsive img-circle" style="background-image: url(@Url.Action("GetUserImage","Home", new { id = Model.UserID })); background-size: cover;"></div>                                            
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-10">
-                                <p style="color:gray;font-size:16px;font-style:normal">Стаття опублікована користувачем: <text style="font-weight:bold"><text ng-bind="userInfo[0].LastName"></text> <text ng-bind="userInfo[0].FirstName"></text></text>. </p>
-                                <p style="font-size:12px; color:gray">@Model.DateCreate</p>
+                                <p style="color:gray;font-size:16px;font-style:normal"> <text style="font-weight:bold"><text ng-bind="userInfo[0].LastName"></text> <text ng-bind="userInfo[0].FirstName"></text></text>. </p>
+                                @*<p style="font-size:12px; color:gray">@Model.DateCreate</p>*@
                             </div>
 
                         </div>

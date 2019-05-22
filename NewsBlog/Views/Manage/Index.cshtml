@@ -45,7 +45,7 @@
                                         <td align="right"><text style="color:gray" class="count">@ViewBag.vCount</text>&nbsp;&nbsp;</td>
                                         <td><label>Кількість коментарів:</label></td>
                                         <td align="right"><text style="color:gray" class="count">@ViewBag.cCount</text><br /></td>
-                                        @if (User.IsInRole("admin"))
+                                        @if (User.IsInRole("Admin"))
                                         {
                                         <td align="right"><text style="color:gray; text-decoration:underline">User role: Admin</text><br /></td>
                                         }
@@ -55,7 +55,7 @@
                             </table>
                             <hr />
                             <a href="/Articles/Create/" class="btn btn-success" style="background-color:#4db7ad;border:none"><span class="glyphicon glyphicon-leaf"></span> Створити новину</a>
-                            @if (User.IsInRole("admin"))
+                            @if (User.IsInRole("Admin"))
                             {
                                 <a href="/Admin/Index/" class="btn btn-info" style="border:none;background-color:#4db7ad"><span class="glyphicon glyphicon-wrench"></span> Адмінпанель</a>
                             }

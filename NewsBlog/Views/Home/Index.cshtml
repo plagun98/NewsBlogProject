@@ -132,7 +132,7 @@
                         <td>
                             <ul>
                                 <li>
-                                    <div class="ratio img-responsive img-circle" style="margin: 10px auto;width:100px;height:100px;background-image: url(@Url.Action("GetUserImage","Home")?id={{::pa.Id}});"></div>
+                                    <div class="ratio img-responsive img-circle" style="margin: 10px auto;width:100px;height:100px;background-image: url(@Url.Action("GetUserImage","Home")?id={{::pa.Id}});background-size: cover;"></div>
                                     <text ng-bind="::pa.LastName"></text>&nbsp; <text ng-bind="::pa.FirstName"></text> <br />
                                     @*<img class="rounded-circle" style="width:100px;height:100px;" ng-src="@Url.Action("GetUserImage","Home")?id={{::pa.Id}}" />*@
                                 </li>
@@ -215,7 +215,7 @@
                 </div>
            
 
-            <footer>
+            <footer style="height: 140px">
                 <div class="row">
                     <div class="col-md-3 col-lg-3 col-sm-3" align="center">
                         <p><i class="glyphicon glyphicon-leaf" style="padding-right:5px; font-size:28px; color:#4DB7AD;"></i><text style="font-weight:700; font-size:24px; color:white ">News CMS</text></p>
@@ -223,23 +223,22 @@
                     </div>
                     <div class="col-md-3 hidden-xs col-lg-3 col-sm-3">
                         <p>
-                            Контактна інформація: <a href="andrii.karachevtsev@gmail.com">
+                            Контактна інформація:<br/>
                                 plagun98@gmail.com
-                            </a>.
                         </p>
                     </div>
                     <div class="col-md-3 hidden-xs col-lg-3 col-sm-3">
                         <p>
-                            ВНЗ:<br /> <a href="http://www.dut.edu.ua/">
+                            ВНЗ:<br /> <a href="https://kpi.ua">
                                 НТУУ "КПІ ім. І. Сікорського"
                             </a>.
                         </p>
                     </div>
                     <div class="col-md-3 hidden-xs col-lg-3 col-sm-3">
                         <p>
-                            GitHub:<br /> <a href="https://github.com/doctorasp">
-                                ASP.NET Development
-                            </a>.
+                            GitHub:<br /> <a href="https://github.com/plagun98">
+    github.com/plagun98
+</a>.
                         </p>
                     </div>
                 </div>

@@ -1,7 +1,6 @@
 ﻿[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
 }
-
 #showMore {
         background-color:#4db7ad;
         border: none;
@@ -195,7 +194,7 @@ ul {
 
 footer {
     background-color: #162135;
-    height: 200px;
+    height: 140px;
     padding: 30px;
     color: gray;
 
@@ -235,4 +234,7 @@ footer {
         background-color:transparent; 
         border-radius:5%; 
         height:30px;
+    }
+    .ratio{
+        background-size: cover;
     }
